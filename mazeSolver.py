@@ -1,7 +1,7 @@
 import pygame
 import random
 
-# Define colors using RGB values
+# colors
 WHITE = (255, 255, 255)
 GREY = (220, 220, 220)
 BLACK = (0, 0, 0)
@@ -9,18 +9,17 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-# Define the time interval for updating the screen (in milliseconds)
+# time interval for updating the screen (in ms)
 UPDATE_TIME_MS = 10
 
-# Initialize Pygame
+#initialization
 pygame.init()
-
-# Set up the window size and title
+# window size and title
 window_size = (500, 500)
 screen = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Maze Solver")
 
-# Define the size of the maze and size of each cell
+# Define the size of the maze and of each cell
 maze_size = 20
 cell_size = window_size[0] // maze_size
 
