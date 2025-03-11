@@ -9,7 +9,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-# time interval for updating the screen (in ms)
+# time interval for refreshing (in ms)
 UPDATE_TIME_MS = 10
 
 #initialization
@@ -19,93 +19,47 @@ window_size = (500, 500)
 screen = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Maze Solver")
 
-# Define the size of the maze and of each cell
-maze_size = 20
+# size of the maze and of each cell
+maze_size = 20 # denotes number of cells along one dimension of the maze
 cell_size = window_size[0] // maze_size
 
 
 class Cell:
-    """
-    Represent a single cell in the maze.
-
-    Attributes:
-        neighbor (list): List to store neighboring cells.
-        generated (bool): Flag to track if the cell has been generated.
-        visited (bool): Flag to track if the cell has been visited during maze solving.
-    """
     def __init__(self) -> None:
-        """
-        Initialize the cell object.
-        """
         self.neighbor: list = []  # List to store neighboring cells
         self.generated: bool = False  # Flag to track if the cell has been generated
         self.visited: bool = False  # Flag to track if the cell has been visited during maze solving
 
     def set_neighbor(self, neighbor: str) -> None:
-        """Set a neighboring cell"""
         self.neighbor.append(neighbor)
 
     def set_generated(self) -> None:
-        """Mark the cell as generated"""
         self.generated = True
 
     def set_visited(self) -> None:
-        """Mark the cell as visited"""
         self.visited = True
 
     def get_neighbor(self) -> list:
-        """Get the list of neighboring cells"""
         return self.neighbor
 
     def get_generated(self) -> bool:
-        """Check if the cell has been generated"""
         return self.generated
 
     def get_visited(self) -> bool:
-        """Check if the cell has been visited"""
         return self.visited
 
 
 class Maze:
-    """
-    Represent a maze grid and provides methods to generate and solve the maze.
-
-    Attributes:
-        maze_size (int): The size of the maze.
-        cell_size (int): The size of each cell in pixels.
-        maze (list): List to store cells representing the maze grid.
-        path (list): List to store the solution path through the maze.
-    """
     def __init__(self, maze_size, cell_size) -> None:
-        """
-        Initialize the Maze object.
-
-        Parameters:
-            maze_size (int): The size of the maze.
-            cell_size (int): The size of each cell in pixels.
-        """
         self.maze_size: int = maze_size  # Size of the maze.
         self.cell_size: int = cell_size  # Size of each cell in pixels
-        self.maze: list[Cell] = [Cell() for _ in range(self.maze_size * self.maze_size)]  # List to store cells
-        self.path: list[tuple[int, int]] = list()  # List to store the solution path
+        self.maze: list[Cell] = [Cell() for _ in range(self.maze_size * self.maze_size)]  # List to store cells representing the maze grid.
+        self.path: list[tuple[int, int]] = list()  # List to store the solution path.
 
-    def at(self, x: int, y: int) -> Cell:
-        """
-        Get the cell at position (x, y) in the maze.
-
-        Parameters:
-            x (int): The x-coordinate of the cell.
-            y (int): The y-coordinate of the cell.
-
-        Returns:
-            Cell: The cell object at the specified position.
-        """
+    def at(self, x: int, y: int) -> Cell: # Returns The cell object at the specified position
         return self.maze[y * self.maze_size + x]
 
-    def generate(self) -> None:
-        """
-        Generate the maze using a randomized depth-first search algorithm.
-        """
+    def generate(self) -> None: 
         visited: int = 0
         stack: list[tuple[int, int]] = list()
 
@@ -160,18 +114,12 @@ class Maze:
             else:
                 stack.pop()
 
-    def solve(self, show: bool = True, update_time_ms: int = 10, show_visited: bool = True) -> list[tuple[int, int]]:
-        """
-        Solve the maze using depth-first search.
+    def solve(self, show: bool = True, update_time_ms: int = 10, show_visited: bool = True) -> list[tuple[int, int]]: # which is the solution path through the maze.
+    
+            # show (bool): Whether to display the solving process (default is True).
+            # update_time_ms (int): Time interval for updating the display in milliseconds (default is 10).
+            # show_visited (bool): Whether to show visited cells during the solving process (default is True).
 
-        Parameters:
-            show (bool): Whether to display the solving process (default is True).
-            update_time_ms (int): Time interval for updating the display in milliseconds (default is 10).
-            show_visited (bool): Whether to show visited cells during the solving process (default is True).
-
-        Returns:
-            list[tuple[int, int]]: The solution path through the maze.
-        """
         stack: list[tuple[int, int]] = list()
 
         x: int = 0
@@ -219,20 +167,11 @@ class Maze:
 
         return self.__get_path()
 
-    def __get_path(self) -> list[tuple[int, int]]:
-        """
-        Get the final solution path through the maze.
-
-        Returns:
-            list[tuple[int, int]]: The solution path.
-        """
+    def __get_path(self) -> list[tuple[int, int]]: # ie final solution path through the maze
         self.__remove_ghost_path()
         return self.path
 
-    def __remove_ghost_path(self) -> None:
-        """
-        Remove any ghost paths from the solution.
-        """
+    def __remove_ghost_path(self) -> None: # for Removing any ghost paths from the solution.
         remove: list = list()
         for i in range(1, len(self.path)):
             x = self.path[i][0]
@@ -260,13 +199,8 @@ class Maze:
         if (self.maze_size - 1, self.maze_size - 1) not in self.path:
             self.path += [(self.maze_size - 1, self.maze_size - 1)]
 
-    def show(self, show_visited: bool = False) -> None:
-        """
-        Display the maze on the Pygame window.
-
-        Parameters:
-            show_visited (bool): Whether to show visited cells (default is False).
-        """
+    def show(self, show_visited: bool = False) -> None: # Display the maze on the Pygame window.
+            #show_visited (bool): Whether to show visited cells (default is False).
         screen.fill(WHITE)
         for y in range(self.maze_size):
             for x in range(self.maze_size):
